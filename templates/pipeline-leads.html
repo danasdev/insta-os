@@ -1,0 +1,231 @@
+<title>Pipeline de Leads</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: summary strip of what needs attention today, then a horizontal pipeline of stage columns; a dialog edits one lead. Default look: void black, ink, hairlines, radius 0 (troque as cores em :root pela sua marca). */
+:root{
+  --void:#0a0a0a; --panel:#111110; --raise:#171715; --ink:#f5f4f1; --muted:#8f8d87; --soft:#5d5b56;
+  --hair:#2e2d2b; --chrome:#d9d9d6; --grain:#d8cfbd;
+  --ok:#8fbf8a; --warn:#d9b45a; --bad:#d9735a;
+  --display:'Michroma',ui-sans-serif,system-ui,sans-serif; --body:'Geist',ui-sans-serif,system-ui,sans-serif; --mono:'Geist Mono',ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--void);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:1440px;margin:0 auto;padding-block:32px 64px;display:flex;flex-direction:column;gap:28px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;border-bottom:1px solid var(--hair);padding-bottom:20px}
+.eb{font-family:var(--mono);font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--grain)}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(22px,3.4vw,34px);letter-spacing:.06em;text-transform:uppercase;margin:8px 0 0;text-wrap:balance}
+button,select,input,textarea{font:inherit;color:inherit}
+.btn{background:var(--ink);color:var(--void);border:0;border-radius:0;padding:10px 16px;font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer}
+.btn:hover{background:var(--chrome)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--hair)}
+.btn.ghost:hover{border-color:var(--chrome)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+:focus-visible{outline:1px solid var(--grain);outline-offset:2px}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:var(--hair);border:1px solid var(--hair)}
+.summary div{background:var(--panel);padding:14px 16px;min-width:0}
+.summary b{display:block;font-family:var(--display);font-weight:400;font-size:24px;font-variant-numeric:tabular-nums}
+.summary span{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.summary .due b{color:var(--warn)} .summary .late b{color:var(--bad)}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.tools input,.tools select{background:var(--panel);border:1px solid var(--hair);border-radius:0;padding:9px 12px;min-width:0}
+.tools input{flex:1 1 220px}
+.board-wrap{overflow-x:auto;border:1px solid var(--hair)}
+.board{display:grid;grid-template-columns:repeat(7,minmax(230px,1fr));min-width:1640px}
+.col{border-right:1px solid var(--hair);min-height:420px;display:flex;flex-direction:column;min-width:0}
+.col:last-child{border-right:0}
+.col h2{margin:0;padding:12px 14px;border-bottom:1px solid var(--hair);display:flex;justify-content:space-between;gap:8px;font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--chrome)}
+.col h2 em{font-style:normal;color:var(--muted);font-variant-numeric:tabular-nums}
+.cards{display:flex;flex-direction:column;gap:8px;padding:10px}
+.card{background:var(--raise);border:1px solid var(--hair);padding:12px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:6px;width:100%}
+.card:hover{border-color:var(--soft)}
+.card .nm{font-weight:600;font-size:15px;overflow-wrap:anywhere}
+.card .meta{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em;overflow-wrap:anywhere}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--hair);padding:2px 6px;color:var(--chrome)}
+.tag.ind{border-color:var(--grain);color:var(--grain)}
+.nx{font-size:13px;color:var(--ink);border-top:1px solid var(--hair);padding-top:6px;overflow-wrap:anywhere}
+.nx.due{color:var(--warn)} .nx.late{color:var(--bad)}
+.empty{padding:14px;color:var(--soft);font-size:13px}
+.state{border:1px dashed var(--hair);padding:28px;color:var(--muted);max-width:62ch}
+.state b{color:var(--ink);font-weight:600}
+dialog{background:var(--panel);color:var(--ink);border:1px solid var(--hair);border-radius:0;padding:0;width:min(560px,calc(100vw - 32px));max-height:calc(100vh - 32px)}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+form{display:flex;flex-direction:column;gap:14px;padding:22px}
+form h3{font-family:var(--display);font-weight:400;font-size:18px;letter-spacing:.06em;text-transform:uppercase;margin:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.grid2{grid-template-columns:1fr}}
+label{display:flex;flex-direction:column;gap:5px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);min-width:0}
+label input,label select,label textarea{background:var(--void);border:1px solid var(--hair);border-radius:0;padding:9px 10px;font-family:var(--body);font-size:14px;letter-spacing:0;text-transform:none;color:var(--ink);min-width:0}
+textarea{resize:vertical;min-height:70px}
+.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center}
+.row .r{display:flex;gap:10px;flex-wrap:wrap}
+.del{background:none;border:0;color:var(--bad);font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;padding:6px 0}
+.confirm{color:var(--bad);font-size:13px}
+.msg{font-size:13px;color:var(--muted)}
+footer{font-size:12px;color:var(--soft)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<main>
+  <header>
+    <div>
+      <div class="eb">insta-os · prospecção e indicações</div>
+      <h1>Pipeline de Leads</h1>
+    </div>
+    <div class="row"><span class="msg" id="status">Carregando leads…</span><button class="btn" id="addBtn" type="button" disabled>Novo lead</button></div>
+  </header>
+
+  <section class="summary" aria-label="Resumo">
+    <div><b id="sTotal">0</b><span>Leads ativos</span></div>
+    <div class="due"><b id="sDue">0</b><span>Follow-up hoje</span></div>
+    <div class="late"><b id="sLate">0</b><span>Follow-up atrasado</span></div>
+    <div><b id="sMeet">0</b><span>Em reunião / proposta</span></div>
+    <div><b id="sWon">0</b><span>Fechados</span></div>
+    <div><b id="sVal">R$ 0</b><span>Em proposta (R$)</span></div>
+  </section>
+
+  <section class="tools" aria-label="Filtros">
+    <input id="q" type="search" placeholder="Buscar empresa, cidade, @instagram…" aria-label="Buscar">
+    <select id="fOrig" aria-label="Origem"><option value="">Toda origem</option><option value="prospeccao">Prospecção</option><option value="indicacao">Indicação</option></select>
+    <select id="fSeg" aria-label="Segmento"><option value="">Todo segmento</option></select>
+  </section>
+
+  <div id="stateBox" class="state" hidden></div>
+  <div class="board-wrap"><div class="board" id="board"></div></div>
+
+  <footer>As skills de prospecção e indicações do plugin insta-os escrevem aqui. As mensagens são sempre enviadas por você, nunca automaticamente.</footer>
+</main>
+
+<dialog id="dlg">
+  <form id="frm" method="dialog">
+    <h3 id="dlgTitle">Novo lead</h3>
+    <div class="grid2">
+      <label>Empresa<input id="f_empresa" required></label>
+      <label>Segmento<select id="f_segmento"></select></label>
+      <label>Cidade<input id="f_cidade"></label>
+      <label>UF<input id="f_uf" maxlength="2"></label>
+      <label>Origem<select id="f_origem"><option value="prospeccao">Prospecção</option><option value="indicacao">Indicação</option></select></label>
+      <label>Indicado por<input id="f_indicadoPor" placeholder="Cliente que indicou"></label>
+      <label>Instagram<input id="f_instagram" placeholder="@empresa"></label>
+      <label>Site<input id="f_site" placeholder="empresa.com.br"></label>
+      <label>Contato<input id="f_contato" placeholder="Nome e cargo"></label>
+      <label>Etapa<select id="f_etapa"></select></label>
+      <label>Próximo passo<input id="f_proximoPasso" placeholder="Ex.: mandar follow-up"></label>
+      <label>Data do próximo passo<input id="f_proximoData" type="date"></label>
+      <label>Valor estimado (R$)<input id="f_valor" type="number" min="0" step="100"></label>
+    </div>
+    <label>Diagnóstico (o que dá pra melhorar)<textarea id="f_diagnostico"></textarea></label>
+    <label>Mensagem de abordagem<textarea id="f_mensagem"></textarea></label>
+    <label>Notas<textarea id="f_notas"></textarea></label>
+    <div class="row">
+      <div><button class="del" id="delBtn" type="button">Excluir lead</button> <span class="confirm" id="delConfirm" hidden>Clique de novo pra excluir de vez.</span></div>
+      <div class="r"><button class="btn ghost" type="button" id="cancelBtn">Cancelar</button><button class="btn" type="submit" id="saveBtn">Salvar</button></div>
+    </div>
+    <div class="msg" id="formMsg"></div>
+  </form>
+</dialog>
+
+<script>
+const STAGES=[['mapeado','Mapeado'],['abordado','Abordado'],['respondeu','Respondeu'],['reuniao','Reunião'],['proposta','Proposta'],['fechado','Fechado'],['perdido','Perdido']];
+const SEGS=[['sistema','Sistema / SaaS / IA'],['varejo','Varejo / e-commerce'],['premium','Serviços premium'],['outro','Outro']];
+const segName=Object.fromEntries(SEGS), stName=Object.fromEntries(STAGES);
+const $=s=>document.querySelector(s);
+let leads=[], db=null, canWrite=true, editing=null, delArmed=false;
+
+$('#fSeg').insertAdjacentHTML('beforeend',SEGS.map(([v,l])=>`<option value="${v}">${l}</option>`).join(''));
+$('#f_segmento').innerHTML=SEGS.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+$('#f_etapa').innerHTML=STAGES.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+
+function today(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function brl(n){return 'R$ '+Math.round(n||0).toLocaleString('pt-BR')}
+function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+
+function render(){
+  const q=$('#q').value.trim().toLowerCase(), fo=$('#fOrig').value, fs=$('#fSeg').value, t=today();
+  const vis=leads.filter(l=>(!fo||l.origem===fo)&&(!fs||l.segmento===fs)&&(!q||[l.empresa,l.cidade,l.uf,l.instagram,l.site,l.contato,l.indicadoPor].join(' ').toLowerCase().includes(q)));
+  const active=leads.filter(l=>!['fechado','perdido'].includes(l.etapa));
+  $('#sTotal').textContent=active.length;
+  $('#sDue').textContent=active.filter(l=>l.proximoData===t).length;
+  $('#sLate').textContent=active.filter(l=>l.proximoData&&l.proximoData<t).length;
+  $('#sMeet').textContent=leads.filter(l=>['reuniao','proposta'].includes(l.etapa)).length;
+  $('#sWon').textContent=leads.filter(l=>l.etapa==='fechado').length;
+  $('#sVal').textContent=brl(leads.filter(l=>l.etapa==='proposta').reduce((a,l)=>a+(+l.valor||0),0));
+  const board=$('#board');board.replaceChildren();
+  for(const [sv,sl] of STAGES){
+    const items=vis.filter(l=>(l.etapa||'mapeado')===sv).sort((a,b)=>(a.proximoData||'9999').localeCompare(b.proximoData||'9999'));
+    const col=el('section','col');const h=el('h2',null,sl);h.appendChild(el('em',null,String(items.length)));col.appendChild(h);
+    const cards=el('div','cards');
+    if(!items.length)cards.appendChild(el('div','empty','Nenhum lead aqui.'));
+    for(const l of items){
+      const c=el('button','card');c.type='button';c.addEventListener('click',()=>openLead(l));
+      c.appendChild(el('div','nm',l.empresa||'Sem nome'));
+      const loc=[l.cidade,l.uf].filter(Boolean).join(' / ');const handle=l.instagram||l.site||'';
+      if(loc||handle)c.appendChild(el('div','meta',[loc,handle].filter(Boolean).join(' · ')));
+      const tg=el('div','tags');tg.appendChild(el('span','tag'+(l.origem==='indicacao'?' ind':''),l.origem==='indicacao'?'Indicação':'Prospecção'));
+      if(l.segmento)tg.appendChild(el('span','tag',segName[l.segmento]||l.segmento));
+      if(+l.valor)tg.appendChild(el('span','tag',brl(l.valor)));c.appendChild(tg);
+      if(l.proximoPasso||l.proximoData){
+        const cls=!l.proximoData?'':l.proximoData<t?' late':l.proximoData===t?' due':'';
+        const dt=l.proximoData?l.proximoData.split('-').reverse().slice(0,2).join('/'):'';
+        c.appendChild(el('div','nx'+(['fechado','perdido'].includes(sv)?'':cls),[dt,l.proximoPasso].filter(Boolean).join(' — ')));
+      }
+      cards.appendChild(c);
+    }
+    col.appendChild(cards);board.appendChild(col);
+  }
+}
+
+const FIELDS=['empresa','segmento','cidade','uf','origem','indicadoPor','instagram','site','contato','etapa','proximoPasso','proximoData','valor','diagnostico','mensagem','notas'];
+function openLead(l){
+  editing=l||null;delArmed=false;$('#delConfirm').hidden=true;$('#formMsg').textContent='';
+  $('#dlgTitle').textContent=l?(l.empresa||'Lead'):'Novo lead';$('#delBtn').hidden=!l||!canWrite;
+  for(const f of FIELDS){const i=$('#f_'+f);i.value=l?(l[f]??''):(f==='etapa'?'mapeado':f==='origem'?'prospeccao':f==='segmento'?'sistema':'');i.disabled=!canWrite}
+  $('#saveBtn').disabled=!canWrite;
+  $('#dlg').showModal();
+}
+$('#addBtn').addEventListener('click',()=>openLead(null));
+$('#cancelBtn').addEventListener('click',()=>$('#dlg').close());
+['#q','#fOrig','#fSeg'].forEach(s=>$(s).addEventListener('input',render));
+
+$('#frm').addEventListener('submit',async e=>{
+  e.preventDefault();if(!db||!canWrite)return;
+  const body={};for(const f of FIELDS){let v=$('#f_'+f).value.trim();if(f==='valor')v=v?Number(v):0;if(f==='uf')v=v.toUpperCase();body[f]=v}
+  if(!body.empresa){$('#formMsg').textContent='Coloque o nome da empresa.';return}
+  body.atualizadoEm=new Date().toISOString();
+  $('#saveBtn').disabled=true;$('#formMsg').textContent='Salvando…';
+  try{
+    if(editing){await db.doc('leads/'+editing.id).update(body)}
+    else{body.criadoEm=body.atualizadoEm;await db.collection('leads').add(body)}
+    $('#dlg').close();
+  }catch(err){
+    if(err&&err.code==='invalid_argument'){canWrite=false;$('#formMsg').textContent='Você só tem acesso de leitura a este painel.'}
+    else if(err&&err.code==='quota_exceeded'){$('#formMsg').textContent='O painel chegou no limite de leads. Exclua leads antigos pra adicionar novos.'}
+    else{$('#formMsg').textContent='Não deu pra salvar agora. Tente de novo em instantes.'}
+  }finally{$('#saveBtn').disabled=!canWrite}
+});
+$('#delBtn').addEventListener('click',async()=>{
+  if(!editing||!db)return;
+  if(!delArmed){delArmed=true;$('#delConfirm').hidden=false;return}
+  try{await db.doc('leads/'+editing.id).delete();$('#dlg').close()}catch(err){$('#formMsg').textContent='Não deu pra excluir agora.'}
+});
+
+function showState(html){const b=$('#stateBox');b.hidden=!html;b.innerHTML=html||''}
+render();
+(async()=>{
+  db=await claude.use('db');
+  if(!db){$('#status').textContent='Painel offline';showState('<b>Não consegui abrir os leads nesta visualização.</b> Entre com sua conta do Claude pra ver e editar o pipeline.');return}
+  const user=await claude.use('user');
+  try{const w=user?await user.can('data.write'):null;if(w===false)canWrite=false}catch(e){}
+  $('#addBtn').disabled=!canWrite;
+  db.collection('leads').onSnapshot(snap=>{
+    leads=snap.docs.map(d=>({id:d.id,...d.data()}));
+    $('#status').textContent=leads.length?`${leads.length} leads`:'Sem leads ainda';
+    showState(leads.length?'':'<b>Nenhum lead ainda.</b> Clique em "Novo lead" ou peça pro Claude rodar a prospecção: cada empresa encontrada entra aqui como "Mapeado", com o diagnóstico e a mensagem prontos pra vocês enviarem.');
+    render();
+  },err=>{$('#status').textContent='Erro ao carregar';showState('<b>Os leads pararam de atualizar.</b> Recarregue a página.')});
+})();
+</script>
