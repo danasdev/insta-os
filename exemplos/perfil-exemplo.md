@@ -65,7 +65,7 @@ Case Padaria Sol Nascente: antes vendia só no balcão e pelo WhatsApp; entregam
 
 - Metricool: conectado (brandId 0000000, fuso America/Recife)
 - Repositório de mídia: atlasdigital/atlas-midia (público)
-- Pipeline de leads: link do artifact
+- Painel: link do artifact
 - Narração: ElevenLabs
 
 ## Regras específicas

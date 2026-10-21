@@ -18,9 +18,11 @@
 | `stories` | Behind-the-scenes, poll, question-box and call-to-action sequences. |
 | `prospeccao-ativa` | Finds local businesses with a weak digital presence, diagnoses each one and drafts a personalized first message. **You** send it. |
 | `indicacoes` | Asks for referrals at the right moment and logs referred leads. |
-| `relatorio-semanal` | Metricool metrics + pipeline → 3 decisions for next week. |
+| `vendedor` | Works the funnel after prospecting: today's to-do list, follow-up cadence, the right message per stage, objection handling, proposals and closing. **You** send. |
+| `analista` | Scores every post with Metricool data, audits your profile (including how the grid looks), tracks competitors and spots formats trending in your niche, to adapt, never copy. |
+| `relatorio-semanal` | Metricool metrics + dashboard → 3 decisions for next week. |
 
-Also included: the **video engine** (`engine/`, with a complete example ad) and a ready **lead pipeline** (`templates/pipeline-leads.html`).
+Also included: the **video engine** (`engine/`, with a complete example ad) and a ready **sales and content dashboard** (`templates/painel.html`: Today, Funnel, Leads, Content, Market tabs).
 
 **Nothing is published, scheduled or sent without your explicit "yes".**
 
@@ -43,7 +45,7 @@ Then say: **"configurar minha marca"** (set up my brand).
 - Automatic media upload: a **public GitHub repo** for media (Metricool needs public URLs); otherwise attach media manually.
 - Screenshots: the desktop app's **built-in browser** or **Claude in Chrome**.
 - Carousels: Claude's **Design** artifact type (fallback: HTML exported to PNG).
-- Lead pipeline: Claude **artifacts with a database** (fallback: a spreadsheet).
+- Dashboard: Claude **artifacts with a database** (fallback: a spreadsheet).
 - Weekly routine: Claude **scheduled tasks**.
 - Motion video: Python 3, ffmpeg, Playwright/Chromium, numpy, scipy (Claude's cloud sessions already have them); ~20–25 min to render a 50s video in both orientations. Commercial music needs a license; the engine can synthesize its own track.
 

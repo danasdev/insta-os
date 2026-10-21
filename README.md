@@ -22,9 +22,11 @@
 | `stories` | Sequências de bastidor, enquete, caixinha e chamada, com o texto exato de cada figurinha. |
 | `prospeccao-ativa` | Encontra empresas da sua região com presença digital fraca, faz um diagnóstico de cada uma e escreve uma abordagem personalizada. **Você** envia. |
 | `indicacoes` | Pede indicação no momento certo e registra os indicados. |
-| `relatorio-semanal` | Métricas do Metricool + pipeline → 3 decisões para a próxima semana. |
+| `vendedor` | Trabalha o funil depois da prospecção: o que fazer hoje, cadência de follow-up, mensagem certa por etapa, objeções, proposta e fechamento. **Você** envia. |
+| `analista` | Dá nota a cada post com dados do Metricool, audita o perfil (inclusive o visual da grade), acompanha concorrentes e levanta formatos em alta no nicho, para adaptar e não copiar. |
+| `relatorio-semanal` | Métricas do Metricool + painel → 3 decisões para a próxima semana. |
 
-Junto vêm o **motor de vídeo** (`engine/`, com um anúncio completo de exemplo) e um **pipeline de leads** pronto (`templates/pipeline-leads.html`).
+Junto vêm o **motor de vídeo** (`engine/`, com um anúncio completo de exemplo) e um **painel** pronto de vendas e conteúdo (`templates/painel.html`, com as abas Hoje, Funil, Leads, Conteúdo e Mercado).
 
 ## Como funciona no dia a dia
 
@@ -67,7 +69,7 @@ Depois, numa conversa: **"configurar minha marca"**.
 | Mídia indo sozinha para o Metricool | Um **repositório público no GitHub** só para mídia (o Metricool exige URL pública). Sem ele, você anexa a mídia à mão |
 | Prints de sites e sistemas | **Navegador embutido** do app desktop ou **Claude no Chrome** |
 | Carrosséis e artes | Tipo de artifact **Design** do Claude; sem ele, HTML exportado em PNG |
-| Pipeline de leads | **Artifacts com banco de dados** do Claude; alternativa: planilha |
+| Painel (leads, funil, notas dos posts, tendências) | **Artifacts com banco de dados** do Claude; alternativa: planilha |
 | Rotina semanal | **Tarefas agendadas** do Claude |
 
 **Vídeo em motion**
@@ -82,9 +84,9 @@ Depois, numa conversa: **"configurar minha marca"**.
 
 ```
 .claude-plugin/        manifesto e marketplace
-skills/                as 11 skills
+skills/                as 13 skills
 engine/                motor de vídeo (render, música, voz) + exemplo-produto/
-templates/             pipeline de leads (artifact com banco de dados)
+templates/             painel de vendas e conteúdo (artifact com banco de dados)
 exemplos/              perfil de marca de exemplo (marca fictícia)
 dist/                  insta-os.plugin para o app do Claude
 ```

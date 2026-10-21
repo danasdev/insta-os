@@ -1,0 +1,442 @@
+<title>Painel da Marca</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: brand header + tab bar (Hoje · Funil · Leads · Conteúdo · Mercado); each tab is a working view; a dialog edits one lead. Tokens de marca: troque as cores e fontes em :root pelas da sua marca. Visual escuro único por escolha. */
+:root{
+  --void:#0a0a0a; --panel:#111110; --raise:#171715; --ink:#f5f4f1; --muted:#8f8d87; --soft:#5d5b56;
+  --hair:#2e2d2b; --chrome:#d9d9d6; --grain:#d8cfbd;
+  --ok:#8fbf8a; --warn:#d9b45a; --bad:#d9735a;
+  --display:'Michroma',ui-sans-serif,system-ui,sans-serif; --body:'Geist',ui-sans-serif,system-ui,sans-serif; --mono:'Geist Mono',ui-monospace,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--void);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:1440px;margin:0 auto;padding-block:28px 64px;display:flex;flex-direction:column;gap:22px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;border-bottom:1px solid var(--hair);padding-bottom:18px}
+.eb{font-family:var(--mono);font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--grain)}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(22px,3.4vw,34px);letter-spacing:.06em;text-transform:uppercase;margin:8px 0 0;text-wrap:balance}
+h2.sec{font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--chrome);margin:0 0 10px;display:flex;gap:10px;align-items:baseline}
+h2.sec em{font-style:normal;color:var(--muted)}
+button,select,input,textarea{font:inherit;color:inherit}
+.btn{background:var(--ink);color:var(--void);border:0;border-radius:0;padding:10px 16px;font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer}
+.btn:hover{background:var(--chrome)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--hair)}
+.btn.ghost:hover{border-color:var(--chrome)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+:focus-visible{outline:1px solid var(--grain);outline-offset:2px}
+nav.tabs{display:flex;gap:0;border:1px solid var(--hair);overflow-x:auto}
+nav.tabs button{flex:1 0 auto;background:var(--panel);border:0;border-right:1px solid var(--hair);padding:12px 18px;font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);cursor:pointer;display:flex;gap:8px;align-items:center;justify-content:center}
+nav.tabs button:last-child{border-right:0}
+nav.tabs button[aria-selected=true]{background:var(--raise);color:var(--ink);box-shadow:inset 0 -2px 0 var(--chrome)}
+nav.tabs .n{font-variant-numeric:tabular-nums;color:var(--grain)}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--hair);border:1px solid var(--hair)}
+.summary div{background:var(--panel);padding:14px 16px;min-width:0}
+.summary b{display:block;font-family:var(--display);font-weight:400;font-size:22px;font-variant-numeric:tabular-nums}
+.summary span{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.summary .due b{color:var(--warn)} .summary .late b{color:var(--bad)} .summary .good b{color:var(--ok)}
+.grid2c{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:22px}
+.box{border:1px solid var(--hair);background:var(--panel);padding:16px;min-width:0}
+.list{display:flex;flex-direction:column}
+.item{display:grid;grid-template-columns:1fr auto;gap:4px 14px;padding:12px 4px;border-top:1px solid var(--hair);text-align:left;background:none;border-left:0;border-right:0;border-bottom:0;cursor:pointer;width:100%}
+.item:first-child{border-top:0}
+.item:hover .nm{text-decoration:underline;text-decoration-color:var(--soft)}
+.item .nm{font-weight:600;overflow-wrap:anywhere}
+.item .meta{grid-column:1/-1;font-family:var(--mono);font-size:11px;color:var(--muted);overflow-wrap:anywhere}
+.item .when{font-family:var(--mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.item .when.due{color:var(--warn)} .item .when.late{color:var(--bad)}
+.item .nx{grid-column:1/-1;font-size:13px}
+.pill{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--hair);padding:2px 6px;color:var(--chrome);white-space:nowrap}
+.pill.a{border-color:var(--ok);color:var(--ok)} .pill.b{border-color:var(--warn);color:var(--warn)} .pill.c{color:var(--muted)}
+.pill.ind{border-color:var(--grain);color:var(--grain)}
+.empty{padding:14px 4px;color:var(--soft);font-size:13px}
+.state{border:1px dashed var(--hair);padding:22px;color:var(--muted);max-width:70ch}
+.state b{color:var(--ink);font-weight:600}
+/* funnel */
+.fun{display:flex;flex-direction:column;gap:8px}
+.frow{display:grid;grid-template-columns:110px 1fr 54px 70px;gap:12px;align-items:center}
+.frow .lb{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--chrome)}
+.frow .bar{height:22px;background:var(--raise);border:1px solid var(--hair);position:relative}
+.frow .bar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,#6f6e6a,var(--chrome));display:block}
+.frow .ct{font-family:var(--display);font-size:15px;font-variant-numeric:tabular-nums;text-align:right}
+.frow .cv{font-family:var(--mono);font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+@media (max-width:520px){.frow{grid-template-columns:84px 1fr 40px}.frow .cv{display:none}}
+table.t{width:100%;border-collapse:collapse;font-size:13px}
+table.t th{font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 10px;border-bottom:1px solid var(--hair);white-space:nowrap}
+table.t td{padding:10px;border-bottom:1px solid var(--hair);vertical-align:top}
+table.t td.num{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.tw{overflow-x:auto}
+.score{display:inline-flex;align-items:center;justify-content:center;min-width:42px;padding:3px 6px;font-family:var(--display);font-size:13px;border:1px solid var(--hair);font-variant-numeric:tabular-nums}
+.score.hi{border-color:var(--ok);color:var(--ok)} .score.mid{border-color:var(--warn);color:var(--warn)} .score.lo{border-color:var(--bad);color:var(--bad)}
+/* board */
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.tools input,.tools select{background:var(--panel);border:1px solid var(--hair);border-radius:0;padding:9px 12px;min-width:0}
+.tools input{flex:1 1 220px}
+.board-wrap{overflow-x:auto;border:1px solid var(--hair)}
+.board{display:grid;grid-template-columns:repeat(7,minmax(220px,1fr));min-width:1580px}
+.col{border-right:1px solid var(--hair);min-height:380px;display:flex;flex-direction:column;min-width:0}
+.col:last-child{border-right:0}
+.col h3{margin:0;padding:12px 14px;border-bottom:1px solid var(--hair);display:flex;justify-content:space-between;gap:8px;font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--chrome)}
+.col h3 em{font-style:normal;color:var(--muted);font-variant-numeric:tabular-nums}
+.cards{display:flex;flex-direction:column;gap:8px;padding:10px}
+.card{background:var(--raise);border:1px solid var(--hair);padding:12px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:6px;width:100%}
+.card:hover{border-color:var(--soft)}
+.card .nm{font-weight:600;overflow-wrap:anywhere}
+.card .meta{font-family:var(--mono);font-size:11px;color:var(--muted);overflow-wrap:anywhere}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.card .nx{font-size:13px;border-top:1px solid var(--hair);padding-top:6px;overflow-wrap:anywhere}
+.card .nx.due{color:var(--warn)} .card .nx.late{color:var(--bad)}
+/* mercado */
+.tcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:12px}
+.tc{border:1px solid var(--hair);background:var(--panel);padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.tc h4{margin:0;font-size:16px;font-weight:600;text-wrap:balance}
+.tc .k{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.tc p{margin:0;font-size:13px;color:#cfccc6}
+.tc .hk{font-family:var(--mono);font-size:12px;color:var(--grain)}
+.tc select{background:var(--void);border:1px solid var(--hair);padding:7px 8px;border-radius:0}
+.tc a{color:var(--chrome)}
+a{color:var(--chrome)}
+/* dialog */
+dialog{background:var(--panel);color:var(--ink);border:1px solid var(--hair);border-radius:0;padding:0;width:min(620px,calc(100vw - 32px));max-height:calc(100vh - 32px)}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+form{display:flex;flex-direction:column;gap:14px;padding:22px}
+form h3{font-family:var(--display);font-weight:400;font-size:18px;letter-spacing:.06em;text-transform:uppercase;margin:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.grid2{grid-template-columns:1fr}}
+label{display:flex;flex-direction:column;gap:5px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);min-width:0}
+label input,label select,label textarea{background:var(--void);border:1px solid var(--hair);border-radius:0;padding:9px 10px;font-family:var(--body);font-size:14px;letter-spacing:0;text-transform:none;color:var(--ink);min-width:0}
+textarea{resize:vertical;min-height:70px}
+.hist{border:1px solid var(--hair);max-height:180px;overflow:auto}
+.hist div{padding:8px 10px;border-bottom:1px solid var(--hair);font-size:13px}
+.hist div:last-child{border-bottom:0}
+.hist b{font-family:var(--mono);font-weight:400;font-size:11px;color:var(--grain);margin-right:8px}
+.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center}
+.row .r{display:flex;gap:10px;flex-wrap:wrap}
+.del{background:none;border:0;color:var(--bad);font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;padding:6px 0}
+.msg{font-size:13px;color:var(--muted)}
+footer{font-size:12px;color:var(--soft)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<main>
+  <header>
+    <div><div class="eb">vendas e conteúdo</div><h1>Painel da Marca</h1></div>
+    <div class="row"><span class="msg" id="status">Carregando…</span><button class="btn" id="addBtn" type="button" disabled>Novo lead</button></div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Seções">
+    <button role="tab" id="t-hoje" data-tab="hoje" aria-selected="true">Hoje <span class="n" id="nHoje"></span></button>
+    <button role="tab" id="t-funil" data-tab="funil" aria-selected="false">Funil</button>
+    <button role="tab" id="t-leads" data-tab="leads" aria-selected="false">Leads <span class="n" id="nLeads"></span></button>
+    <button role="tab" id="t-conteudo" data-tab="conteudo" aria-selected="false">Conteúdo</button>
+    <button role="tab" id="t-mercado" data-tab="mercado" aria-selected="false">Mercado <span class="n" id="nIdeias"></span></button>
+  </nav>
+
+  <div id="stateBox" class="state" hidden></div>
+
+  <!-- HOJE -->
+  <section id="p-hoje" role="tabpanel" aria-labelledby="t-hoje">
+    <div class="summary" style="margin-bottom:22px">
+      <div class="late"><b id="hWait">0</b><span>Esperando vocês</span></div>
+      <div class="late"><b id="hLate">0</b><span>Follow-up atrasado</span></div>
+      <div class="due"><b id="hDue">0</b><span>Follow-up hoje</span></div>
+      <div><b id="hNew">0</b><span>Novos para abordar</span></div>
+      <div><b id="hStale">0</b><span>Parados 14+ dias</span></div>
+    </div>
+    <div class="grid2c">
+      <div class="box"><h2 class="sec">Responderam: esperando vocês</h2><div class="list" id="lWait"></div></div>
+      <div class="box"><h2 class="sec">Follow-ups (atrasados e de hoje)</h2><div class="list" id="lFollow"></div></div>
+      <div class="box"><h2 class="sec">Abordar hoje <em>até 5, encaixe A primeiro</em></h2><div class="list" id="lNew"></div></div>
+      <div class="box"><h2 class="sec">Parados há 14+ dias</h2><div class="list" id="lStale"></div></div>
+    </div>
+  </section>
+
+  <!-- FUNIL -->
+  <section id="p-funil" role="tabpanel" aria-labelledby="t-funil" hidden>
+    <div class="summary" style="margin-bottom:22px">
+      <div><b id="fAtivos">0</b><span>Leads ativos</span></div>
+      <div><b id="fResp">—</b><span>Taxa de resposta</span></div>
+      <div><b id="fProp">R$ 0</b><span>Em proposta</span></div>
+      <div class="good"><b id="fWon">0</b><span>Fechados</span></div>
+      <div class="good"><b id="fWonV">R$ 0</b><span>Valor fechado</span></div>
+    </div>
+    <div class="grid2c">
+      <div class="box"><h2 class="sec">Onde estão os leads <em>e quantos chegaram a cada etapa</em></h2><div class="fun" id="fun"></div></div>
+      <div class="box"><h2 class="sec">Resposta por segmento e origem</h2><div class="tw"><table class="t" id="tSeg"></table></div>
+        <h2 class="sec" style="margin-top:18px">Motivos de perda</h2><div id="lLoss"></div></div>
+    </div>
+  </section>
+
+  <!-- LEADS -->
+  <section id="p-leads" role="tabpanel" aria-labelledby="t-leads" hidden>
+    <div class="tools" style="margin-bottom:12px">
+      <input id="q" type="search" placeholder="Buscar empresa, cidade, @instagram…" aria-label="Buscar">
+      <select id="fOrig" aria-label="Origem"><option value="">Toda origem</option><option value="prospeccao">Prospecção</option><option value="indicacao">Indicação</option><option value="conteudo">Conteúdo</option></select>
+      <select id="fSeg" aria-label="Segmento"><option value="">Todo segmento</option></select>
+    </div>
+    <div class="board-wrap"><div class="board" id="board"></div></div>
+  </section>
+
+  <!-- CONTEUDO -->
+  <section id="p-conteudo" role="tabpanel" aria-labelledby="t-conteudo" hidden>
+    <div class="grid2c">
+      <div class="box"><h2 class="sec">Auditoria do perfil <em id="audData"></em></h2><div id="audit"></div></div>
+      <div class="box"><h2 class="sec">Resumo dos posts <em>últimos 30 dias</em></h2><div class="summary" id="pSum"></div><p class="msg" style="margin:12px 0 0">A nota vai de 0 a 10 e compara cada post com a mediana da própria conta. Pesam mais os compartilhamentos e os salvamentos.</p></div>
+    </div>
+    <div class="box" style="margin-top:22px"><h2 class="sec">Posts <em id="pCount"></em></h2><div class="tw"><table class="t" id="tPosts"></table></div></div>
+  </section>
+
+  <!-- MERCADO -->
+  <section id="p-mercado" role="tabpanel" aria-labelledby="t-mercado" hidden>
+    <h2 class="sec">Tendências e ideias <em>formato e gancho para adaptar, nunca copiar</em></h2>
+    <div class="tools" style="margin-bottom:12px"><select id="fTend" aria-label="Status"><option value="">Todas</option><option value="ideia">Ideias</option><option value="na-pauta">Na pauta</option><option value="feito">Feitas</option><option value="descartada">Descartadas</option></select></div>
+    <div class="tcards" id="tend"></div>
+    <h2 class="sec" style="margin-top:28px">Perfis acompanhados</h2>
+    <div class="box"><div class="tw"><table class="t" id="tRefs"></table></div></div>
+  </section>
+
+  <footer>As skills do plugin insta-os escrevem aqui (prospecção, vendedor, analista). Mensagens são sempre enviadas por vocês, nunca automaticamente.</footer>
+</main>
+
+<dialog id="dlg">
+  <form id="frm" method="dialog">
+    <h3 id="dlgTitle">Novo lead</h3>
+    <div class="grid2">
+      <label>Empresa<input id="f_empresa" required></label>
+      <label>Segmento<select id="f_segmento"></select></label>
+      <label>Cidade<input id="f_cidade"></label>
+      <label>UF<input id="f_uf" maxlength="2"></label>
+      <label>Origem<select id="f_origem"><option value="prospeccao">Prospecção</option><option value="indicacao">Indicação</option><option value="conteudo">Conteúdo</option></select></label>
+      <label>Indicado por<input id="f_indicadoPor" placeholder="Cliente que indicou"></label>
+      <label>Encaixe<select id="f_encaixe"><option value="">—</option><option value="A">A · prioridade</option><option value="B">B · nutrir</option><option value="C">C · não agora</option></select></label>
+      <label>Instagram<input id="f_instagram" placeholder="@empresa"></label>
+      <label>Site<input id="f_site" placeholder="empresa.com.br"></label>
+      <label>Contato<input id="f_contato" placeholder="Nome e cargo, ou canal"></label>
+      <label>Etapa<select id="f_etapa"></select></label>
+      <label>Próximo passo<input id="f_proximoPasso" placeholder="Ex.: follow-up 2"></label>
+      <label>Data do próximo passo<input id="f_proximoData" type="date"></label>
+      <label>Valor (R$)<input id="f_valor" type="number" min="0" step="100"></label>
+      <label>Motivo da perda<select id="f_motivoPerda"><option value="">—</option><option>preço</option><option>timing</option><option>sem resposta</option><option>escolheu outro</option><option>sem encaixe</option></select></label>
+    </div>
+    <label>Dor (nas palavras do lead)<textarea id="f_dor"></textarea></label>
+    <label>Diagnóstico<textarea id="f_diagnostico"></textarea></label>
+    <label>Mensagem preparada<textarea id="f_mensagem"></textarea></label>
+    <label>Notas<textarea id="f_notas"></textarea></label>
+    <div><div class="k" style="font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Histórico</div><div class="hist" id="hist"></div></div>
+    <label>Registrar contato de hoje<input id="f_novoHist" placeholder="Ex.: mandei o follow-up 2 com o print da home"></label>
+    <div class="row">
+      <div><button class="del" id="delBtn" type="button">Excluir lead</button> <span class="msg" id="delConfirm" hidden style="color:var(--bad)">Clique de novo pra excluir de vez.</span></div>
+      <div class="r"><button class="btn ghost" type="button" id="cancelBtn">Cancelar</button><button class="btn" type="submit" id="saveBtn">Salvar</button></div>
+    </div>
+    <div class="msg" id="formMsg"></div>
+  </form>
+</dialog>
+
+<script>
+const STAGES=[['mapeado','Mapeado'],['abordado','Abordado'],['respondeu','Respondeu'],['reuniao','Reunião'],['proposta','Proposta'],['fechado','Fechado'],['perdido','Perdido']];
+const ORDER=['mapeado','abordado','respondeu','reuniao','proposta','fechado'];
+const SEGS=[['sistema','Sistema / SaaS / IA'],['varejo','Varejo / e-commerce'],['premium','Serviços premium'],['outro','Outro']];
+const ORIG={prospeccao:'Prospecção',indicacao:'Indicação',conteudo:'Conteúdo'};
+const segName=Object.fromEntries(SEGS), stName=Object.fromEntries(STAGES);
+const $=s=>document.querySelector(s);
+let leads=[],posts=[],refs=[],tends=[],perfil=null,db=null,canWrite=true,editing=null,delArmed=false;
+
+$('#fSeg').insertAdjacentHTML('beforeend',SEGS.map(([v,l])=>`<option value="${v}">${l}</option>`).join(''));
+$('#f_segmento').innerHTML=SEGS.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+$('#f_etapa').innerHTML=STAGES.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+
+function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+const today=()=>ymd(new Date());
+function daysAgo(n){const d=new Date();d.setDate(d.getDate()-n);return ymd(d)}
+function brl(n){return 'R$ '+Math.round(n||0).toLocaleString('pt-BR')}
+function pct(x){return (x*100).toLocaleString('pt-BR',{maximumFractionDigits:1})+'%'}
+function dm(s){return s?s.slice(0,10).split('-').reverse().slice(0,2).join('/'):''}
+function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+const active=l=>!['fechado','perdido'].includes(l.etapa||'mapeado');
+const lastTouch=l=>(l.ultimoContato||l.atualizadoEm||l.criadoEm||'').slice(0,10);
+
+/* tabs */
+const TABS=['hoje','funil','leads','conteudo','mercado'];
+function showTab(t){if(!TABS.includes(t))t='hoje';for(const x of TABS){$('#p-'+x).hidden=x!==t;$('#t-'+x).setAttribute('aria-selected',String(x===t))}}
+document.querySelectorAll('nav.tabs button').forEach(b=>b.addEventListener('click',()=>{showTab(b.dataset.tab);try{history.replaceState(null,'','#'+b.dataset.tab)}catch(e){}}));
+showTab((location.hash||'').slice(1));
+
+function leadItem(l,whenCls){
+  const b=el('button','item');b.type='button';b.addEventListener('click',()=>openLead(l));
+  b.appendChild(el('span','nm',l.empresa||'Sem nome'));
+  b.appendChild(el('span','when'+(whenCls?' '+whenCls:''),dm(l.proximoData)));
+  const tg=[stName[l.etapa||'mapeado'],[l.cidade,l.uf].filter(x=>x&&!/não/.test(x)).join(' / '),l.instagram?'@'+l.instagram.replace(/^@/,''):''].filter(Boolean).join(' · ');
+  b.appendChild(el('span','meta',tg));
+  if(l.proximoPasso)b.appendChild(el('span','nx',l.proximoPasso));
+  return b;
+}
+function fill(id,items,empty){const c=$(id);c.replaceChildren();if(!items.length)c.appendChild(el('div','empty',empty));else items.forEach(i=>c.appendChild(i))}
+
+function renderHoje(){
+  const t=today(),A=leads.filter(active);
+  const wait=A.filter(l=>['respondeu','reuniao','proposta'].includes(l.etapa)&&(!l.proximoData||l.proximoData<=t));
+  const late=A.filter(l=>l.etapa==='abordado'&&l.proximoData&&l.proximoData<t);
+  const due=A.filter(l=>l.etapa==='abordado'&&l.proximoData===t);
+  const rank={A:0,B:1,C:3};const enc=l=>l.encaixe||((l.notas||'').match(/Encaixe ([ABC])/)||[])[1]||'B';
+  const fresh=A.filter(l=>(l.etapa||'mapeado')==='mapeado'&&enc(l)!=='C').sort((a,b)=>(rank[enc(a)]??2)-(rank[enc(b)]??2)).slice(0,5);
+  const stale=A.filter(l=>(l.etapa||'mapeado')!=='mapeado'&&lastTouch(l)&&lastTouch(l)<daysAgo(14));
+  $('#hWait').textContent=wait.length;$('#hLate').textContent=late.length;$('#hDue').textContent=due.length;$('#hNew').textContent=A.filter(l=>(l.etapa||'mapeado')==='mapeado').length;$('#hStale').textContent=stale.length;
+  $('#nHoje').textContent=(wait.length+late.length+due.length)||'';
+  fill('#lWait',wait.map(l=>leadItem(l,l.proximoData&&l.proximoData<t?'late':'due')),'Ninguém esperando resposta de vocês.');
+  fill('#lFollow',[...late.map(l=>leadItem(l,'late')),...due.map(l=>leadItem(l,'due'))],'Nenhum follow-up vencendo hoje.');
+  fill('#lNew',fresh.map(l=>{const i=leadItem(l,'');i.querySelector('.when').replaceWith(el('span','pill '+enc(l).toLowerCase(),'Encaixe '+enc(l)));return i}),'Sem leads novos. Peça uma prospecção ao Claude.');
+  fill('#lStale',stale.map(l=>leadItem(l,'late')),'Nada parado.');
+}
+
+function renderFunil(){
+  const A=leads.filter(active),reach=s=>leads.filter(l=>{const e=l.etapa||'mapeado';if(e==='perdido'){const k=l.toque>0?'abordado':'mapeado';return ORDER.indexOf(k)>=ORDER.indexOf(s)}return ORDER.indexOf(e)>=ORDER.indexOf(s)}).length;
+  $('#fAtivos').textContent=A.length;
+  const contacted=reach('abordado'),answered=reach('respondeu');
+  $('#fResp').textContent=contacted?pct(answered/contacted):'—';
+  $('#fProp').textContent=brl(leads.filter(l=>l.etapa==='proposta').reduce((a,l)=>a+(+l.valor||0),0));
+  const won=leads.filter(l=>l.etapa==='fechado');$('#fWon').textContent=won.length;$('#fWonV').textContent=brl(won.reduce((a,l)=>a+(+l.valor||0),0));
+  const f=$('#fun');f.replaceChildren();const max=Math.max(1,reach('mapeado'));
+  ORDER.forEach((s,i)=>{const r=reach(s),now=leads.filter(l=>(l.etapa||'mapeado')===s).length;
+    const row=el('div','frow');row.appendChild(el('span','lb',stName[s]));
+    const bar=el('div','bar');const fillEl=el('i');fillEl.style.width=(r/max*100)+'%';bar.appendChild(fillEl);row.appendChild(bar);
+    row.appendChild(el('span','ct',String(r)));
+    const prev=i?reach(ORDER[i-1]):0;row.appendChild(el('span','cv',i&&prev?pct(r/prev)+' ↓':now+' aqui'));
+    row.title=`${now} lead(s) nesta etapa agora; ${r} chegaram até aqui`;f.appendChild(row)});
+  const lost=leads.filter(l=>l.etapa==='perdido');f.appendChild(el('div','msg',`${lost.length} perdido(s). Barras = quantos chegaram até cada etapa; à direita, a conversão da etapa anterior.`));
+  const groups={};for(const l of leads){for(const k of [segName[l.segmento]||'Outro',ORIG[l.origem]||'Prospecção']){const g=groups[k]||(groups[k]={n:0,c:0,a:0,w:0});g.n++;const e=l.etapa||'mapeado';const c=e!=='mapeado'||(l.toque>0);if(c)g.c++;if(['respondeu','reuniao','proposta','fechado'].includes(e))g.a++;if(e==='fechado')g.w++}}
+  const tb=$('#tSeg');tb.innerHTML='<tr><th>Grupo</th><th class="num">Leads</th><th class="num">Abordados</th><th class="num">Responderam</th><th class="num">Fechados</th></tr>';
+  for(const [k,g] of Object.entries(groups)){const tr=el('tr');tr.appendChild(el('td',null,k));[g.n,g.c,g.c?`${g.a} (${pct(g.a/g.c)})`:'—',g.w].forEach(v=>tr.appendChild(el('td','num',String(v))));tb.appendChild(tr)}
+  const reasons={};lost.forEach(l=>{const r=l.motivoPerda||'sem motivo';reasons[r]=(reasons[r]||0)+1});
+  const ll=$('#lLoss');ll.replaceChildren();const re=Object.entries(reasons).sort((a,b)=>b[1]-a[1]);
+  if(!re.length)ll.appendChild(el('div','empty','Nenhuma perda registrada.'));else re.forEach(([r,n])=>ll.appendChild(el('div','msg',`${n} × ${r}`)));
+}
+
+function renderLeads(){
+  const q=$('#q').value.trim().toLowerCase(),fo=$('#fOrig').value,fs=$('#fSeg').value,t=today();
+  const vis=leads.filter(l=>(!fo||(l.origem||'prospeccao')===fo)&&(!fs||l.segmento===fs)&&(!q||[l.empresa,l.cidade,l.uf,l.instagram,l.site,l.contato,l.indicadoPor].join(' ').toLowerCase().includes(q)));
+  $('#nLeads').textContent=leads.filter(active).length||'';
+  const board=$('#board');board.replaceChildren();
+  for(const [sv,sl] of STAGES){
+    const items=vis.filter(l=>(l.etapa||'mapeado')===sv).sort((a,b)=>(a.proximoData||'9999').localeCompare(b.proximoData||'9999'));
+    const col=el('section','col');const h=el('h3',null,sl);h.appendChild(el('em',null,String(items.length)));col.appendChild(h);
+    const cards=el('div','cards');if(!items.length)cards.appendChild(el('div','empty','Nenhum lead aqui.'));
+    for(const l of items){
+      const c=el('button','card');c.type='button';c.addEventListener('click',()=>openLead(l));
+      c.appendChild(el('div','nm',l.empresa||'Sem nome'));
+      const loc=[l.cidade,l.uf].filter(x=>x&&!/não/.test(x)).join(' / '),handle=l.instagram?'@'+l.instagram.replace(/^@/,''):(l.site||'');
+      if(loc||handle)c.appendChild(el('div','meta',[loc,handle].filter(Boolean).join(' · ')));
+      const tg=el('div','tags');tg.appendChild(el('span','pill'+(l.origem==='indicacao'?' ind':''),ORIG[l.origem]||'Prospecção'));
+      const enc=l.encaixe||((l.notas||'').match(/Encaixe ([ABC])/)||[])[1];if(enc)tg.appendChild(el('span','pill '+enc.toLowerCase(),'Encaixe '+enc));
+      if(+l.valor)tg.appendChild(el('span','pill',brl(l.valor)));c.appendChild(tg);
+      if(l.proximoPasso||l.proximoData){const cls=['fechado','perdido'].includes(sv)||!l.proximoData?'':l.proximoData<t?' late':l.proximoData===t?' due':'';c.appendChild(el('div','nx'+cls,[dm(l.proximoData),l.proximoPasso].filter(Boolean).join(' — ')))}
+      cards.appendChild(c);
+    }
+    col.appendChild(cards);board.appendChild(col);
+  }
+}
+
+function scoreCls(n){return n>=7?'hi':n>=4?'mid':'lo'}
+function renderConteudo(){
+  const a=$('#audit');a.replaceChildren();
+  if(!perfil){a.appendChild(el('div','empty','Ainda sem auditoria. Peça ao Claude: "analisa o perfil".'));$('#audData').textContent=''}
+  else{
+    $('#audData').textContent=perfil.data?'em '+dm(perfil.data):'';
+    const top=el('div','row');top.style.marginBottom='10px';const s=el('span','score '+scoreCls(+perfil.notaGeral||0),(+perfil.notaGeral||0).toLocaleString('pt-BR',{maximumFractionDigits:1}));top.appendChild(s);
+    top.appendChild(el('span','msg',[perfil.seguidores!=null?perfil.seguidores+' seguidores':'',perfil.posts30d!=null?perfil.posts30d+' posts em 30 dias':''].filter(Boolean).join(' · ')));a.appendChild(top);
+    const tw=el('div','tw'),tb=el('table','t');tb.innerHTML='<tr><th>Área</th><th>Nota</th><th>Achado</th><th>O que fazer</th></tr>';
+    (perfil.itens||[]).forEach(it=>{const tr=el('tr');tr.appendChild(el('td',null,it.area));const td=el('td');td.appendChild(el('span','score '+scoreCls(+it.nota||0),String(it.nota??'—')));tr.appendChild(td);tr.appendChild(el('td',null,it.achado||''));tr.appendChild(el('td',null,it.acao||''));tb.appendChild(tr)});
+    tw.appendChild(tb);a.appendChild(tw);
+  }
+  const since=daysAgo(30),P=posts.filter(p=>(p.data||'')>=since);
+  const sum=$('#pSum');sum.replaceChildren();const sm=(k)=>P.reduce((x,p)=>x+(+p[k]||0),0);
+  const avgN=P.length?P.reduce((x,p)=>x+(+p.nota||0),0)/P.length:null;
+  [[P.length,'Posts'],[sm('alcance').toLocaleString('pt-BR'),'Alcance somado'],[sm('alcance')?pct(sm('salvos')/sm('alcance')):'—','Salvos / alcance'],[sm('alcance')?pct(sm('compart')/sm('alcance')):'—','Envios / alcance'],[avgN==null?'—':avgN.toLocaleString('pt-BR',{maximumFractionDigits:1}),'Nota média']].forEach(([v,l])=>{const d=el('div');d.appendChild(el('b',null,String(v)));d.appendChild(el('span',null,l));sum.appendChild(d)});
+  const tp=$('#tPosts');tp.replaceChildren();$('#pCount').textContent=posts.length?posts.length+' no total':'';
+  if(!posts.length){const tr=el('tr'),td=el('td','empty','Os posts aparecem aqui quando o Metricool tiver os dados (normalmente 1 a 2 dias depois de publicar). O analista grava a nota de cada um toda segunda.');td.colSpan=9;tr.appendChild(td);tp.appendChild(tr);return}
+  tp.innerHTML='<tr><th>Data</th><th>Formato</th><th>Gancho</th><th class="num">Alcance</th><th class="num">Salvos</th><th class="num">Envios</th><th class="num">Seguiram</th><th>Nota</th><th>Leitura</th></tr>';
+  [...posts].sort((a,b)=>(b.data||'').localeCompare(a.data||'')).forEach(p=>{const tr=el('tr');tr.appendChild(el('td','num',dm(p.data)));tr.appendChild(el('td',null,p.tipo||''));
+    const g=el('td');if(p.url){const a2=el('a',null,p.gancho||p.texto||'post');a2.href=p.url;a2.target='_blank';a2.rel='noopener';g.appendChild(a2)}else g.textContent=p.gancho||p.texto||'';tr.appendChild(g);
+    const r=+p.alcance||0;tr.appendChild(el('td','num',r.toLocaleString('pt-BR')));
+    tr.appendChild(el('td','num',r?`${p.salvos||0} · ${pct((p.salvos||0)/r)}`:String(p.salvos||0)));
+    tr.appendChild(el('td','num',r?`${p.compart||0} · ${pct((p.compart||0)/r)}`:String(p.compart||0)));
+    tr.appendChild(el('td','num',String(p.follows||0)));
+    const td=el('td');if(p.nota!=null)td.appendChild(el('span','score '+scoreCls(+p.nota),(+p.nota).toLocaleString('pt-BR',{maximumFractionDigits:1})));tr.appendChild(td);
+    tr.appendChild(el('td',null,p.leitura||''));tp.appendChild(tr)});
+}
+
+const TST=[['ideia','Ideia'],['na-pauta','Na pauta'],['feito','Feito'],['descartada','Descartada']];
+function renderMercado(){
+  const f=$('#fTend').value,box=$('#tend');box.replaceChildren();
+  const list=tends.filter(x=>!f||(x.status||'ideia')===f).sort((a,b)=>(a.status==='ideia'?0:1)-(b.status==='ideia'?0:1)||(b.criadoEm||'').localeCompare(a.criadoEm||''));
+  $('#nIdeias').textContent=tends.filter(x=>(x.status||'ideia')==='ideia').length||'';
+  if(!list.length)box.appendChild(el('div','empty','Nenhuma tendência aqui. Peça ao Claude: "o que está viralizando na área?"'));
+  for(const x of list){
+    const c=el('article','tc');c.appendChild(el('span','k',[x.formato,x.fonte].filter(Boolean).join(' · ')));c.appendChild(el('h4',null,x.titulo||''));
+    if(x.gancho)c.appendChild(el('span','hk',x.gancho));
+    if(x.porqueFunciona){c.appendChild(el('span','k','Por que funciona'));c.appendChild(el('p',null,x.porqueFunciona))}
+    if(x.comoAdaptar){c.appendChild(el('span','k','Como a marca faria'));c.appendChild(el('p',null,x.comoAdaptar))}
+    const row=el('div','row');
+    if(x.exemplo){const a=el('a',null,'Ver exemplo ↗');a.href=x.exemplo;a.target='_blank';a.rel='noopener';row.appendChild(a)}else row.appendChild(el('span'));
+    const sel=el('select');sel.id='st-'+x.id;sel.setAttribute('aria-label','Status de '+(x.titulo||'tendência'));sel.innerHTML=TST.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');sel.value=x.status||'ideia';sel.disabled=!canWrite||!db;
+    sel.addEventListener('change',async()=>{sel.disabled=true;try{await db.doc('tendencias/'+x.id).update({status:sel.value})}catch(e){sel.value=x.status||'ideia';if(e&&e.code==='invalid_argument')canWrite=false}finally{sel.disabled=!canWrite}});
+    row.appendChild(sel);c.appendChild(row);box.appendChild(c);
+  }
+  const tr=$('#tRefs');tr.innerHTML='<tr><th>Perfil</th><th>Tipo</th><th>Seguidores</th><th>Por que acompanhar</th></tr>';
+  const TL={'concorrente':'Concorrente','referencia-formato':'Referência de formato','cliente-ideal':'Cliente ideal'};
+  if(!refs.length){const r=el('tr'),td=el('td','empty','Nenhum perfil cadastrado ainda.');td.colSpan=4;r.appendChild(td);tr.appendChild(r)}
+  [...refs].sort((a,b)=>(a.tipo||'').localeCompare(b.tipo||'')).forEach(x=>{const r=el('tr'),td=el('td'),a=el('a',null,'@'+(x.handle||x.id));a.href='https://www.instagram.com/'+(x.handle||x.id)+'/';a.target='_blank';a.rel='noopener';td.appendChild(a);if(x.nome){td.appendChild(document.createElement('br'));td.appendChild(el('span','msg',x.nome))}r.appendChild(td);
+    r.appendChild(el('td',null,TL[x.tipo]||x.tipo||''));r.appendChild(el('td','num',x.seguidores||''));r.appendChild(el('td',null,x.porque||''));tr.appendChild(r)});
+}
+
+function renderAll(){renderHoje();renderFunil();renderLeads();renderConteudo();renderMercado()}
+
+/* lead dialog */
+const FIELDS=['empresa','segmento','cidade','uf','origem','indicadoPor','encaixe','instagram','site','contato','etapa','proximoPasso','proximoData','valor','motivoPerda','dor','diagnostico','mensagem','notas'];
+function openLead(l){
+  editing=l||null;delArmed=false;$('#delConfirm').hidden=true;$('#formMsg').textContent='';
+  $('#dlgTitle').textContent=l?(l.empresa||'Lead'):'Novo lead';$('#delBtn').hidden=!l||!canWrite;
+  for(const f of FIELDS){const i=$('#f_'+f);let v=l?(l[f]??''):(f==='etapa'?'mapeado':f==='origem'?'prospeccao':f==='segmento'?'sistema':'');
+    if(f==='encaixe'&&l&&!v)v=((l.notas||'').match(/Encaixe ([ABC])/)||[])[1]||'';i.value=v;i.disabled=!canWrite}
+  $('#f_novoHist').value='';$('#f_novoHist').disabled=!canWrite;
+  const h=$('#hist');h.replaceChildren();const hs=(l&&Array.isArray(l.historico))?l.historico:[];
+  if(!hs.length)h.appendChild(el('div','msg','Nenhum contato registrado.'));
+  [...hs].reverse().forEach(x=>{const d=el('div');d.appendChild(el('b',null,dm(x.data)+(x.canal?' · '+x.canal:'')));d.appendChild(document.createTextNode(x.resumo||''));h.appendChild(d)});
+  $('#saveBtn').disabled=!canWrite;$('#dlg').showModal();
+}
+$('#addBtn').addEventListener('click',()=>openLead(null));
+$('#cancelBtn').addEventListener('click',()=>$('#dlg').close());
+['#q','#fOrig','#fSeg'].forEach(s=>$(s).addEventListener('input',renderLeads));
+$('#fTend').addEventListener('input',renderMercado);
+$('#frm').addEventListener('submit',async e=>{
+  e.preventDefault();if(!db||!canWrite)return;
+  const body={};for(const f of FIELDS){let v=$('#f_'+f).value.trim();if(f==='valor')v=v?Number(v):0;if(f==='uf')v=v.toUpperCase();body[f]=v}
+  if(!body.empresa){$('#formMsg').textContent='Coloque o nome da empresa.';return}
+  const now=new Date().toISOString();body.atualizadoEm=now;
+  const nh=$('#f_novoHist').value.trim();
+  if(nh){const prev=(editing&&Array.isArray(editing.historico))?editing.historico:[];body.historico=[...prev,{data:today(),canal:'',resumo:nh}];body.ultimoContato=today()}
+  $('#saveBtn').disabled=true;$('#formMsg').textContent='Salvando…';
+  try{if(editing)await db.doc('leads/'+editing.id).update(body);else{body.criadoEm=now;await db.collection('leads').add(body)}$('#dlg').close()}
+  catch(err){if(err&&err.code==='invalid_argument'){canWrite=false;$('#formMsg').textContent='Você só tem acesso de leitura a este painel.'}else if(err&&err.code==='quota_exceeded'){$('#formMsg').textContent='O painel chegou no limite de documentos. Exclua leads antigos pra adicionar novos.'}else{$('#formMsg').textContent='Não deu pra salvar agora. Tente de novo em instantes.'}}
+  finally{$('#saveBtn').disabled=!canWrite}
+});
+$('#delBtn').addEventListener('click',async()=>{if(!editing||!db)return;if(!delArmed){delArmed=true;$('#delConfirm').hidden=false;return}
+  try{await db.doc('leads/'+editing.id).delete();$('#dlg').close()}catch(err){$('#formMsg').textContent='Não deu pra excluir agora.'}});
+
+function showState(html){const b=$('#stateBox');b.hidden=!html;b.innerHTML=html||''}
+renderAll();
+(async()=>{
+  db=await claude.use('db');
+  if(!db){$('#status').textContent='Painel offline';showState('<b>Não consegui abrir os dados nesta visualização.</b> Entre com sua conta do Claude pra ver e editar o painel.');return}
+  const user=await claude.use('user');
+  try{const w=user?await user.can('data.write'):null;if(w===false)canWrite=false}catch(e){}
+  $('#addBtn').disabled=!canWrite;
+  const err=()=>{$('#status').textContent='Erro ao carregar';showState('<b>O painel parou de atualizar.</b> Recarregue a página.')};
+  db.collection('leads').onSnapshot(s=>{leads=s.docs.map(d=>({id:d.id,...d.data()}));$('#status').textContent=`${leads.length} leads`;renderHoje();renderFunil();renderLeads()},err);
+  db.collection('posts').onSnapshot(s=>{posts=s.docs.map(d=>({id:d.id,...d.data()}));renderConteudo()},err);
+  db.doc('perfil/atual').onSnapshot(d=>{perfil=d.exists?d.data():null;renderConteudo()},err);
+  db.collection('tendencias').onSnapshot(s=>{tends=s.docs.map(d=>({id:d.id,...d.data()}));renderMercado()},err);
+  db.collection('referencias').onSnapshot(s=>{refs=s.docs.map(d=>({id:d.id,...d.data()}));renderMercado()},err);
+})();
+</script>

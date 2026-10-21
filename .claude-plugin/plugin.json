@@ -1,10 +1,21 @@
 {
   "name": "insta-os",
-  "version": "1.0.0",
-  "description": "Sistema operacional de Instagram para o Claude: pauta semanal, reels em motion graphics, carrosséis de case e educativos, stories, prospecção, indicações e relatório, com agendamento no Metricool e playbook técnico (algoritmo, ganchos, psicologia, design).",
-  "author": { "name": "Entropy", "url": "https://entropydev.com.br" },
+  "version": "1.1.0",
+  "description": "Sistema operacional de Instagram e vendas para o Claude: pauta semanal, reels em motion graphics, carrosséis, stories, analista (nota de cada post, auditoria do perfil, tendências), prospecção, vendedor (funil, follow-ups, propostas), indicações e relatório, num painel único, com Metricool e playbook técnico.",
+  "author": {
+    "name": "Entropy",
+    "url": "https://entropydev.com.br"
+  },
   "homepage": "https://github.com/danasdev/insta-os",
   "repository": "https://github.com/danasdev/insta-os",
   "license": "MIT",
-  "keywords": ["instagram", "social media", "marketing", "motion graphics", "metricool", "leads", "pt-br"]
+  "keywords": [
+    "instagram",
+    "social media",
+    "marketing",
+    "motion graphics",
+    "metricool",
+    "leads",
+    "pt-br"
+  ]
 }

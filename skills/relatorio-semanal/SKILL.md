@@ -1,6 +1,6 @@
 ---
 name: relatorio-semanal
-description: Gera o relatório semanal do Instagram da marca com dados do Metricool (alcance, engajamento, salvamentos, seguidores, melhores posts e horários) e do pipeline de leads, e transforma em 3 decisões para a pauta seguinte. Use quando pedirem "relatório do insta", "como foi a semana", "métricas", "o que funcionou", ou na tarefa agendada de segunda-feira.
+description: Gera o relatório semanal do Instagram da marca com dados do Metricool (alcance, engajamento, salvamentos, seguidores, melhores posts e horários) e do painel, e transforma em 3 decisões para a pauta seguinte. Use quando pedirem "relatório do insta", "como foi a semana", "métricas", "o que funcionou", ou na tarefa agendada de segunda-feira.
 ---
 
 # Relatório semanal
@@ -15,9 +15,11 @@ Leia antes a skill `marca` e `playbook-instagram/references/metricas.md` (KPIs, 
 - Salve as respostas em arquivos e calcule em código (variação %, taxa de engajamento = interações ÷ alcance); não faça conta de cabeça.
 - Sem Metricool conectado: diga isso e peça os números do Insights do Instagram (print ou texto).
 
-**Pipeline** (`ArtifactData` `list` da coleção `leads` no pipeline registrado no perfil (ou a planilha de leads)): leads novos na semana, por origem, mudanças de etapa, reuniões e propostas, follow-ups atrasados.
+**Painel** (`ArtifactData` `list` da coleção `leads` no painel registrado no perfil, ou a planilha de leads): leads novos na semana, por origem, mudanças de etapa, reuniões e propostas, follow-ups atrasados.
 
 ## 2. Análise
+
+Rode antes a skill `analista` (nota de cada post da semana, gravada em `posts` no painel) e use as notas e leituras dela.
 
 - Top 3 posts da semana por salvamentos + compartilhamentos (eles indicam valor real) e o pior; o que tinham em comum (formato, pilar, gancho, horário).
 - Leia os dados de cada post com cuidado: uma semana tem poucos posts; fale de tendência só com 3–4 semanas de histórico.

@@ -21,7 +21,7 @@ Use AskUserQuestion, em no máximo duas rodadas de até 4 perguntas:
 1. Públicos (2–3) e região de prospecção.
 2. Portfólio: quais projetos são de **clientes reais** (e se autorizaram divulgação), quais são **produtos próprios**, **conceito**, e quais **não podem aparecer**.
 3. Ritmo de postagem que conseguem sustentar e quem aprova.
-4. Conexões que já têm ou querem: Metricool, GitHub (repositório público de mídia), pipeline de leads, ElevenLabs.
+4. Conexões que já têm ou querem: Metricool, GitHub (repositório público de mídia), painel de vendas e conteúdo, ElevenLabs.
 5. Fatos confirmados de cada case (antes, entrega, resultados liberados).
 6. Pronúncia do nome da marca e de produtos (para locução).
 
@@ -33,7 +33,7 @@ Preencha todas as seções do modelo com o que descobriu e com as respostas. Mos
 
 - **Metricool**: se não estiver conectado, procure o conector no registro (palavras-chave "metricool", "social media") e sugira conectar; peça para ligar o Instagram dentro do Metricool. Registre brandId e fuso no perfil.
 - **Repositório público de mídia**: o Metricool só aceita mídia por URL pública. Peça ao usuário para criar um repositório **público** vazio no GitHub (ex.: `minhamarca-midia`) e ligar o GitHub ao Claude; anexe-o com `add_repo` (access `push`), clone, crie um README com a organização das pastas (`AAAA/MM-DD-<peca>/`) e registre `dono/repo` no perfil. Sem isso, a mídia é anexada à mão no Metricool.
-- **Pipeline de leads**: publique `templates/pipeline-leads.html` (raiz do plugin) como artifact com as capacidades `db` e `user`, troque as cores em `:root` pelas da marca e registre o link no perfil. Sem artifacts, use uma planilha com as mesmas colunas (ver `prospeccao-ativa/references/abordagem.md`).
+- **Painel**: publique `templates/painel.html` (raiz do plugin) como artifact com as capacidades `db` e `user`, troque nome, cores e fontes em `:root` pelos da marca e registre o link no perfil. As skills `prospeccao-ativa`, `vendedor`, `indicacoes` e `analista` gravam nele (coleções `leads`, `posts`, `perfil`, `referencias`, `tendencias`). Sem artifacts, use uma planilha com as mesmas colunas (ver `prospeccao-ativa/references/abordagem.md`).
 - **Tarefa semanal**: ofereça criar uma tarefa agendada (ex.: segunda 8h45) que roda `relatorio-semanal` + `calendario-semanal` e deixa tudo aguardando aprovação. Coloque no prompt da tarefa os fatos fixos do perfil.
 
 ## 5. Entregar

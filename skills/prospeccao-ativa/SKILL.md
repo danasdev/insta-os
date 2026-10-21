@@ -1,6 +1,6 @@
 ---
 name: prospeccao-ativa
-description: Encontra empresas da região e dos segmentos-alvo da marca com presença digital fraca, faz um diagnóstico do site e do Instagram de cada uma, escreve a mensagem de abordagem personalizada e registra tudo no pipeline de leads. Use quando pedirem "prospectar", "achar clientes", "lista de leads", "abordar empresas de X em Y", "follow-up dos leads".
+description: Encontra empresas da região e dos segmentos-alvo da marca com presença digital fraca, faz um diagnóstico do site e do Instagram de cada uma, escreve a mensagem de abordagem personalizada e registra tudo no painel. Use quando pedirem "prospectar", "achar clientes", "lista de leads", "abordar empresas de X em Y", "follow-up dos leads".
 ---
 
 # Prospecção ativa

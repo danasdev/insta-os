@@ -17,7 +17,8 @@ Leia antes a skill `marca` (e o perfil da marca) e, da skill `playbook-instagram
    - `getBestTimeToPostByNetwork` (Instagram) para escolher horários.
    - Se o Metricool não estiver conectado, diga em uma linha que a pauta sai sem horários otimizados e sem agendamento, e siga.
 2. **Último relatório** (skill `relatorio-semanal`): se houver um desta conversa ou o usuário colar, use as 3 decisões dele.
-3. **Novidades**: pergunte em uma pergunta curta (AskUserQuestion) se há projeto recém-entregue, lançamento ou evento na semana. Se ninguém responder (tarefa agendada), siga com o portfólio.
+3. **Tendências** (aba Mercado do painel, coleção `tendencias` com status `ideia` ou `na-pauta`, via `ArtifactData`): encaixe pelo menos uma por semana, adaptando formato e gancho, nunca copiando. Ao pautar, mude o status para `na-pauta`; depois de publicada, `feito`.
+4. **Novidades**: pergunte em uma pergunta curta (AskUserQuestion) se há projeto recém-entregue, lançamento ou evento na semana. Se ninguém responder (tarefa agendada), siga com o portfólio.
 
 ## 2. Montar a pauta
 
@@ -34,6 +35,7 @@ Regras:
 - Gire o portfólio: o mesmo projeto não aparece em duas peças de feed na mesma semana nem em semanas seguidas.
 - Educativo conversa com um dos 3 públicos (sistema, varejo, premium); alterne o público a cada semana.
 - Um reel motion completo é caro (render de ~20 min). Se já existir um reel recente não publicado, ou um vídeo pronto (ex.: o institucional), prefira cortes dele (15s, 9:16) e diga isso.
+- **Varie a cor predominante da grade:** pelo menos 1 post claro a cada 3–4 escuros, e nunca 3 capas iguais seguidas.
 - Toda peça tem um CTA; uma por semana tem CTA direto para contato ("chama no direct com a palavra SITE").
 
 Mostre a pauta como tabela (dia | horário | formato | tema | gancho | CTA) e espere aprovação. Se o usuário não estiver presente, prepare tudo e deixe aguardando aprovação, sem agendar.

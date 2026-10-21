@@ -63,7 +63,7 @@ Fatos confirmados de cada case (antes, entrega, resultados que o cliente liberou
 
 - Metricool: [conectado? brandId/blogId e fuso]
 - Repositório público de mídia (GitHub `dono/repo`, ou "não tem" → mídia anexada à mão): [preencher]
-- Pipeline de leads (link do artifact ou planilha): [preencher]
+- Painel de vendas e conteúdo (link do artifact ou planilha): [preencher]
 - Narração: [ElevenLabs / locutor / voz local / sem narração]
 
 ## Regras específicas

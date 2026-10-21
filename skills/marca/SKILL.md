@@ -41,8 +41,12 @@ calendario-semanal ──► anuncio-motion-video (reel)
         ▼
    Metricool (agenda, após aprovação; mídia via repositório público)
         ▼
+analista ──► nota dos posts, auditoria do perfil, tendências ──► painel (Conteúdo, Mercado)
+        ▼
 relatorio-semanal ──► ajusta a próxima pauta
 
-prospeccao-ativa ──► pipeline de leads ◄── indicacoes
+prospeccao-ativa ──► painel (Leads) ◄── indicacoes
+        ▼
+vendedor ──► o que fazer hoje, follow-ups, objeções, proposta, fechamento
 case-de-projeto  ──► pede depoimento e indicação ao cliente
 ```
