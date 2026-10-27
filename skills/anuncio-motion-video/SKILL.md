@@ -16,7 +16,7 @@ Tudo é HTML/CSS/JS renderizado quadro a quadro (`seek(t)` determinística) mais
 3. **Duração de reel: ~20s por padrão** (alcance: 7–15s para motion, segundo o `playbook-instagram`). Entregue também o corte de 15s. A versão completa de ~40s só quando pedirem, ou para site/LinkedIn.
 4. **Gancho em até 3s.** Quadro 1 já com texto grande e movimento; a primeira informação nova antes dos 3s. Siga `playbook-instagram/references/ganchos-e-retencao.md` e `psicologia.md`; o vídeo corta logo após a recompensa, com o CTA sobreposto nos últimos 2s.
 5. **Rascunho antes do render final.** Render 540p/15fps para aprovar movimento e ritmo (minutos), só então o render completo. Veja `references/render.md`.
-6. **Padrões de cena de referência.** Escolha 2–4 padrões em `references/cenas-jitter.md` (texto esticado, transição por stretch, pilha de cards, revelação de produto…) e anote-os na coluna "padrão" do roteiro. São referência de movimento; nunca copie layout, marca, texto ou assets de terceiros.
+6. **Padrões de cena de referência.** Escolha 2–4 padrões em `references/cenas-jitter.md` e `references/referencias-video.md` (texto esticado, transição por stretch, pilha de cards, revelação de produto…) e anote-os na coluna "padrão" do roteiro. São referência de movimento; nunca copie layout, marca, texto ou assets de terceiros.
 
 ## Dois modos
 
@@ -34,7 +34,7 @@ Crie a lista de tarefas logo no início: briefing → identidade visual → pega
 
 1. **Briefing, identidade visual, roteiro, build e áudio:** siga o guia do modo (`produto.md` ou `institucional.md`). Pergunte só o que não dá para descobrir sozinho; sem o usuário presente, assuma os padrões, diga quais assumiu e siga.
 2. **Pegada** (ritmo, música, transições, acabamento por segmento): `references/pegadas.md`. Os presets em `scripts/presets.json` aplicam BPM, acordes e baixo no `music.py` com `scripts/apply_preset.py` (`--list` mostra os segmentos).
-3. **Referências de cena:** `references/cenas-jitter.md`. Se o usuário mandar um MP4 de referência, descreva o estilo com contact sheets (receita em `produto.md`, seção "Referência do usuário"). Referência é só estilo.
+3. **Referências de cena e estilo:** `references/cenas-jitter.md` (padrões de movimento) e `references/referencias-video.md` (três vídeos de referência analisados quadro a quadro: regras de estilo, padrões com tempo e receitas JS). Se o usuário mandar um MP4 de referência, descreva o estilo com contact sheets (receita em `produto.md`, seção "Referência do usuário"). Referência é só estilo.
 4. **Rascunho → aprovação → render final → montagem:** `references/render.md` (inclui `scripts/render.py`, parametrizado, que funciona com qualquer `index.html`).
 5. **QA:** `references/qa.md` (contact sheets, varredura de texto fora da tela e de área segura, áudio).
 6. **Entrega:** `SendUserFile` com os MP4 (`display: render`); nomes `<produto>_anuncio_9x16.mp4` e `_16x9.mp4`. Em poucas linhas: o que mostra, o que foi assumido, o que é mockup/aproximado (logo, telas, dados de exemplo) e o próximo passo natural (corte de 15s, versão 16:9, trocar locução). Legenda: gancho na primeira linha, 1 CTA, 3–5 hashtags, alt text. Se a locução final ainda não existe, entregue junto o roteiro ElevenLabs.

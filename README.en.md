@@ -12,7 +12,7 @@
 | `marca` | Loads the profile and the rules every other skill follows. |
 | `playbook-instagram` | Technical base: how the algorithm distributes each format, hooks and retention, 16 psychology principles with their research, carousel and design, stories, captions and search, lead capture, metrics and targets. Separates **official** (Meta/Mosseri) from **measured** (third-party) claims. |
 | `calendario-semanal` | Plans the week (e.g. 1 reel, 1 proof carousel, 1 educational post + stories) at your account's best times, produces the pieces and schedules them in Metricool **after you approve**. |
-| `anuncio-motion-video` | Frame-by-frame rendered motion ads, 9:16 first (~20s + 15s cut): product mode (3D UI, cursor, camera zoom) and brand mode (kinetic type cut to the music, 3D project carousel). Per-industry presets for the soundtrack, a scene-pattern library, a quick draft render for approval, automatic safe-zone QA and voice-over scripts with ElevenLabs tags. |
+| `anuncio-motion-video` | Frame-by-frame rendered motion ads, 9:16 first (~20s + 15s cut): product mode (3D UI, cursor, camera zoom) and brand mode (kinetic type cut to the music, 3D project carousel). Per-industry presets for the soundtrack, a scene-pattern library and 3 reference videos broken down frame by frame, a quick draft render for approval, automatic safe-zone QA and voice-over scripts with ElevenLabs tags. |
 | `case-de-projeto` | Delivered project → case carousel, caption, stories and a testimonial request — without exposing client data. |
 | `post-educativo` | Carousels that teach your ideal client and get saved. |
 | `stories` | Behind-the-scenes, poll, question-box and call-to-action sequences. |

@@ -39,6 +39,7 @@ Monte folhas rotuladas com o tempo, incluindo **momentos de transição** (corte
 
 - RMS por cena, pico < 0,99, zero amostras clipadas, voz ~8–12 dB acima da música durante a fala (música −18 a −22 dB sob a voz); níveis finais ~-16 dB RMS.
 - Espectrograma (`showspectrumpic`) para ver agudos ásperos.
+- Loudness integrada: `ffmpeg -i mix.wav -af loudnorm=print_format=summary -f null -`. Mire em ~−14 LUFS; as referências de `referencias-video.md` estão bem mais altas que o nosso −16 dB RMS e o vídeo pode soar fraco no feed.
 - Você não consegue ouvir: diga isso, aponte os pontos de emenda da música com o tempo exato e peça ao usuário para conferir.
 
 ## 4. Entrega
