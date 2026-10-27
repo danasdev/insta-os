@@ -1,0 +1,99 @@
+{
+  "_comentario": "Pontos de partida por segmento. bpm/chords/roots são aplicados no music.py por apply_preset.py; os demais campos orientam o template e o acabamento (ouça e ajuste). Acordes em notas MIDI.",
+  "tech": {
+    "bpm": 100,
+    "chords": [[53,57,60,64],[57,60,64,67],[55,59,60,64],[55,59,62,67]],
+    "roots": [41,45,48,43],
+    "acordes_nome": "Fmaj7 Am7 Cmaj7 G",
+    "som": "synths limpos, kick + palmas suaves, arpejo com delay, sinos nas trocas",
+    "transicoes": ["zoom", "reveal", "whip", "push", "dark"],
+    "flash": "curto nos cortes com zoom",
+    "blur": "alto",
+    "visual": "escuro monocromático, UI em 3D, cursor",
+    "voz": "confiante, moderna"
+  },
+  "alimenticio": {
+    "bpm": 110,
+    "chords": [[48,52,55,62],[55,59,62,67],[57,60,64,67],[53,57,60,64]],
+    "roots": [36,43,45,41],
+    "acordes_nome": "Cadd9 G Am7 Fmaj7",
+    "som": "maior, plucks quentes, ukulele/marimba sintetizada, percussão leve",
+    "transicoes": ["pop", "push", "whip"],
+    "flash": "nenhum",
+    "blur": "baixo",
+    "visual": "fundo claro ou quente, fotos/ilustrações do produto, cantos bem arredondados, pops com overshoot",
+    "voz": "calorosa, sorridente"
+  },
+  "saude": {
+    "bpm": 85,
+    "chords": [[48,52,55,59],[52,55,59,62],[57,60,64,67],[53,57,60,64]],
+    "roots": [36,40,45,41],
+    "acordes_nome": "Cmaj7 Em7 Am7 Fmaj7",
+    "som": "pads longos, sem bateria pesada",
+    "transicoes": ["fade", "reveal"],
+    "flash": "nenhum",
+    "blur": "médio, lento",
+    "visual": "claro, verdes/azuis suaves, muito respiro",
+    "voz": "calma, acolhedora"
+  },
+  "fintech": {
+    "bpm": 98,
+    "chords": [[57,60,64,67],[53,57,60,64],[48,52,55,59],[52,56,59,62]],
+    "roots": [45,41,48,40],
+    "acordes_nome": "Am7 Fmaj7 Cmaj7 E7",
+    "som": "menor com resolução maior, sub discreto",
+    "transicoes": ["push", "zoom"],
+    "flash": "nenhum",
+    "blur": "baixo",
+    "visual": "escuro ou navy, dados e gráficos, números em contador",
+    "voz": "séria, segura"
+  },
+  "educacao": {
+    "bpm": 105,
+    "chords": [[55,59,62,67],[50,54,57,62],[52,55,59,62],[48,52,55,59]],
+    "roots": [43,38,40,36],
+    "acordes_nome": "G D Em7 Cmaj7",
+    "som": "maior, leve e otimista",
+    "transicoes": ["reveal", "slide"],
+    "flash": "nenhum",
+    "blur": "baixo",
+    "visual": "claro, cores vivas controladas, destaques em marca-texto",
+    "voz": "didática, animada"
+  },
+  "moda": {
+    "bpm": 95,
+    "chords": [[50,57,60,64],[55,59,62,64],[48,55,59,62],[57,61,64,67]],
+    "roots": [38,43,36,45],
+    "acordes_nome": "Dm9 G13 Cmaj9 A7",
+    "som": "groove elegante",
+    "transicoes": ["wipe", "mask", "corte seco"],
+    "flash": "nenhum",
+    "blur": "médio",
+    "visual": "editorial, alto contraste, tipografia serifada grande",
+    "voz": "sofisticada, pausada"
+  },
+  "corporativo": {
+    "bpm": 90,
+    "chords": [[48,52,55,59],[57,60,64,67],[53,57,60,64],[55,59,62,64]],
+    "roots": [36,45,41,43],
+    "acordes_nome": "Cmaj7 Am7 Fmaj7 G6",
+    "som": "piano + pad",
+    "transicoes": ["fade", "câmera lenta"],
+    "flash": "nenhum",
+    "blur": "baixo",
+    "visual": "sóbrio, fotos amplas",
+    "voz": "institucional"
+  },
+  "games": {
+    "bpm": 126,
+    "chords": [[57,60,64,67],[53,57,60,65],[55,60,64,67],[55,59,62,67]],
+    "roots": [45,41,48,43],
+    "acordes_nome": "Am F C G",
+    "som": "energia alta, kick forte",
+    "transicoes": ["glitch", "shake", "whip"],
+    "flash": "forte",
+    "blur": "médio",
+    "visual": "saturado, neon",
+    "voz": "empolgada"
+  }
+}

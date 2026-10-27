@@ -16,7 +16,7 @@
 | `marca` | Carrega o perfil e as regras que todas as outras skills seguem. |
 | `playbook-instagram` | Base técnica: como o algoritmo distribui cada formato, ganchos e retenção, 16 princípios de psicologia com a pesquisa por trás, carrossel e design, stories, legenda e busca, captação, métricas e metas. Separa o que é **oficial** (Meta/Mosseri) do que é **medido** por terceiros. |
 | `calendario-semanal` | Monta a pauta da semana (ex.: 1 reel, 1 carrossel de prova, 1 educativo + stories) nos melhores horários da sua conta, produz as peças e agenda no Metricool **depois da sua aprovação**. |
-| `anuncio-motion-video` | Reels e anúncios em motion graphics renderizados quadro a quadro: modo produto (UI em 3D, cursor, zoom) e modo institucional (texto cinético na batida da música, carrossel 3D de projetos, cena de responsividade). Roteiro com entonações para ElevenLabs. |
+| `anuncio-motion-video` | Reels e anúncios em motion graphics renderizados quadro a quadro, 9:16 primeiro (~20s + corte de 15s): modo produto (UI em 3D, cursor, zoom) e modo institucional (texto cinético na batida da música, carrossel 3D de projetos). Pegadas por segmento com presets de trilha, biblioteca de padrões de cena, rascunho rápido para aprovação, QA automático de área segura e roteiro com entonações para ElevenLabs. |
 | `case-de-projeto` | Projeto entregue → carrossel de case, legenda, stories e pedido de depoimento, sem expor dados do cliente. |
 | `post-educativo` | Carrosséis que ensinam o seu cliente ideal e geram salvamentos. |
 | `stories` | Sequências de bastidor, enquete, caixinha e chamada, com o texto exato de cada figurinha. |

@@ -10,7 +10,7 @@
       "name": "insta-os",
       "source": "./",
       "description": "Sistema operacional de Instagram e vendas para o Claude: pauta, reels em motion, carrosséis, stories, analista de perfil e tendências, prospecção, vendedor e relatório, num painel único, com Metricool e playbook técnico.",
-      "version": "1.1.0"
+      "version": "1.2.0"
     }
   ]
 }

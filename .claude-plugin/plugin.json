@@ -1,6 +1,6 @@
 {
   "name": "insta-os",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Sistema operacional de Instagram e vendas para o Claude: pauta semanal, reels em motion graphics, carrosséis, stories, analista (nota de cada post, auditoria do perfil, tendências), prospecção, vendedor (funil, follow-ups, propostas), indicações e relatório, num painel único, com Metricool e playbook técnico.",
   "author": {
     "name": "Entropy",
